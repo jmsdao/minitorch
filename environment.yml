@@ -1,0 +1,32 @@
+name: minitorch
+channels:
+  - anaconda
+  - conda-forge
+  - defaults
+  - pytorch
+  - sorki
+dependencies:
+  - python>=3.10
+  - colorama
+  - hypothesis
+  - mypy
+  - numba
+  - numpy
+  - pre-commit
+  - pytest
+  - pytest-env
+  - pytest-runner
+  - typing_extensions
+  - datasets
+  - networkx
+  - plotly
+  - pydot
+  - pytorch
+  - streamlit
+  - watchdog
+  - conda-lock>=2.5.1
+  - pip
+  - pip: 
+    - streamlit-ace
+    - embeddings
+    - python-mnist

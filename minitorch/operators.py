@@ -168,7 +168,10 @@ def addLists(ls1: Iterable[float], ls2: Iterable[float]) -> Iterable[float]:
     return zipWith(add)(ls1, ls2)
 
 
-def reduce(fn: Callable[[float, float], float], start: float) -> Callable[[Iterable[float]], float]:
+def reduce(
+    fn: Callable[[float, float], float],
+    start: float,
+) -> Callable[[Iterable[float]], float]:
     r"""
     Higher-order reduce.
 
@@ -182,7 +185,7 @@ def reduce(fn: Callable[[float, float], float], start: float) -> Callable[[Itera
          fn(x_1, x_0)))`
     """
 
-    def reducer(ls: Iterable[float]):
+    def reducer(ls: Iterable[float]) -> float:
         accumulation = start
         for value in ls:
             accumulation = fn(accumulation, value)
