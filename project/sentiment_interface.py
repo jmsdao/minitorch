@@ -47,7 +47,6 @@ def load_data(dataset, n_train, n_val):
 
 
 def render_run_sentiment_interface():
-
     st.header("Sentiment Classification")
     st.write(
         "[Glue SS2 Dataset documentation](https://huggingface.co/datasets/glue/viewer/sst2/train)"

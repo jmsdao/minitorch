@@ -8,7 +8,6 @@ from run_mnist_multiclass import ImageTrain, make_mnist
 
 
 def render_run_image_interface():
-
     st.markdown("### Dataset")
     n_training_samples = st.number_input(
         "Number of training samples",
