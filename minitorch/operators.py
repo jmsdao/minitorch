@@ -128,8 +128,10 @@ def map(fn: Callable[[float], float]) -> Callable[[Iterable[float]], Iterable[fl
          A function that takes a list, applies `fn` to each element, and returns a
          new list
     """
+
     def mapper(ls: Iterable[float]) -> Iterable[float]:
         return [fn(x) for x in ls]
+
     return mapper
 
 
@@ -154,8 +156,10 @@ def zipWith(
          applying fn(x, y) on each pair of elements.
 
     """
+
     def zipper(ls1: Iterable[float], ls2: Iterable[float]) -> Iterable[float]:
         return [fn(x, y) for x, y in zip(ls1, ls2)]
+
     return zipper
 
 
@@ -164,9 +168,7 @@ def addLists(ls1: Iterable[float], ls2: Iterable[float]) -> Iterable[float]:
     return zipWith(add)(ls1, ls2)
 
 
-def reduce(
-    fn: Callable[[float, float], float], start: float
-) -> Callable[[Iterable[float]], float]:
+def reduce(fn: Callable[[float, float], float], start: float) -> Callable[[Iterable[float]], float]:
     r"""
     Higher-order reduce.
 
@@ -179,12 +181,14 @@ def reduce(
          $x_1 \ldots x_n$ and computes the reduction :math:`fn(x_3, fn(x_2,
          fn(x_1, x_0)))`
     """
+
     def reducer(ls: Iterable[float]):
         accumulation = start
         for value in ls:
             accumulation = fn(accumulation, value)
         return accumulation
-    return reducer 
+
+    return reducer
 
 
 def sum(ls: Iterable[float]) -> float:
