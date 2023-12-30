@@ -63,8 +63,28 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     Returns:
         Non-constant Variables in topological order starting from the right.
     """
-    # TODO: Implement for Task 1.4.
-    raise NotImplementedError("Need to implement for Task 1.4")
+    permanent_mark = set()
+    temporary_mark = set()
+    sorted_nodes = []
+
+    def visit(node: Variable):
+        if node.unique_id in permanent_mark:
+            return
+        if node.unique_id in temporary_mark:
+            raise ValueError("Not a DAG")
+
+        temporary_mark.add(node.unique_id)
+
+        for parent in node.parents:
+            visit(parent)
+
+        temporary_mark.remove(node.unique_id)
+        permanent_mark.add(node.unique_id)
+        sorted_nodes.append(node)
+
+    visit(variable)
+
+    return sorted_nodes[::-1]
 
 
 def backpropagate(variable: Variable, deriv: Any) -> None:
@@ -78,8 +98,17 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
 
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
-    # TODO: Implement for Task 1.4.
-    raise NotImplementedError("Need to implement for Task 1.4")
+    sorted_nodes = topological_sort(variable)
+    uid2deriv = {node.unique_id: 0.0 for node in sorted_nodes}
+    uid2deriv[variable.unique_id] = deriv
+
+    for node in sorted_nodes:
+        if node.is_leaf():
+            node.accumulate_derivative(uid2deriv[node.unique_id])
+        else:
+            results = node.chain_rule(uid2deriv[node.unique_id])
+            for input, deriv in results:
+                uid2deriv[input.unique_id] += deriv
 
 
 @dataclass
