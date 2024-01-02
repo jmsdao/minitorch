@@ -184,8 +184,7 @@ class LT(Function):
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, Tensor]:
-        # TODO: not passing tests
-        zero_tensor = tensor(np.zeros(grad_output.shape))
+        zero_tensor = zeros(grad_output.shape, backend=grad_output.backend)
         return zero_tensor, zero_tensor
 
 
@@ -196,8 +195,7 @@ class EQ(Function):
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, Tensor]:
-        # TODO: not passing tests
-        zero_tensor = tensor(np.zeros(grad_output.shape))
+        zero_tensor = zeros(grad_output.shape, backend=grad_output.backend)
         return zero_tensor, zero_tensor
 
 
@@ -210,13 +208,23 @@ class IsClose(Function):
 class Permute(Function):
     @staticmethod
     def forward(ctx: Context, a: Tensor, order: Tensor) -> Tensor:
-        # NOTE: seems dodgy
-        return Tensor(a._tensor.permute(*order._tensor._storage))
+        ctx.save_for_backward(order)
+        order = tuple(int(i) for i in order._tensor._storage)
+        new_tensor_data = a._tensor.permute(*order)
+        return minitorch.Tensor(new_tensor_data, back=a.history, backend=a.backend)
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, float]:
-        # TODO: not passing tests
-        return grad_output, 1.0
+        # TODO: understand why this works
+        (order,) = ctx.saved_tensors
+        rev_order = [int(0)] * order.size
+        for i in range(order.size):
+            dim = int(order[i])
+            rev_order[dim] = i
+
+        tensor_data = grad_output._tensor.permute(*rev_order)
+        out_tensor = minitorch.Tensor(tensor_data, backend=grad_output.backend)
+        return out_tensor, 0.0
 
 
 class View(Function):
