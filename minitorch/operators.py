@@ -115,6 +115,11 @@ def relu_back(x: float, d: float) -> float:
     return d if x > 0 else 0.0
 
 
+def sigmoid_back(x: float, d: float) -> float:
+    r"If $f = sigmoid$ compute $d \times f'(x)$"
+    return d * sigmoid(x) * (1 - sigmoid(x))
+
+
 # ## Task 0.3
 
 # Small practice library of elementary higher-order functions.

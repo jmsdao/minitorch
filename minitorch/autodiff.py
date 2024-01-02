@@ -76,6 +76,8 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
         temporary_mark.add(node.unique_id)
 
         for parent in node.parents:
+            if parent.is_constant():
+                continue
             visit(parent)
 
         temporary_mark.remove(node.unique_id)
@@ -108,7 +110,8 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
         else:
             results = node.chain_rule(uid2deriv[node.unique_id])
             for input, deriv in results:
-                uid2deriv[input.unique_id] += deriv
+                if not input.is_constant():
+                    uid2deriv[input.unique_id] += deriv
 
 
 @dataclass
