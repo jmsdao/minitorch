@@ -184,6 +184,7 @@ class LT(Function):
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, Tensor]:
+        # TODO: not passing tests
         zero_tensor = tensor(np.zeros(grad_output.shape))
         return zero_tensor, zero_tensor
 
@@ -195,6 +196,7 @@ class EQ(Function):
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, Tensor]:
+        # TODO: not passing tests
         zero_tensor = tensor(np.zeros(grad_output.shape))
         return zero_tensor, zero_tensor
 
@@ -213,6 +215,7 @@ class Permute(Function):
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, float]:
+        # TODO: not passing tests
         return grad_output, 1.0
 
 
