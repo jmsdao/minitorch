@@ -111,13 +111,19 @@ class Mul(Function):
 class Sigmoid(Function):
     @staticmethod
     def forward(ctx: Context, t1: Tensor) -> Tensor:
-        ctx.save_for_backward(t1)
-        return t1.f.sigmoid_map(t1)
+        sigmoid_result = t1.f.sigmoid_map(t1)
+        ctx.save_for_backward(sigmoid_result)
+        return sigmoid_result
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tensor:
-        (t1,) = ctx.saved_values
-        return grad_output.f.sigmoid_back_zip(t1, grad_output)
+        (sigmoid_result,) = ctx.saved_values
+        f = grad_output.f
+        ones = minitorch.Tensor.make([1.0], (1,), backend=grad_output.backend)
+        sigmoid_grad = f.mul_zip(
+            sigmoid_result, f.add_zip(ones, f.neg_map(sigmoid_result))
+        )
+        return f.mul_zip(sigmoid_grad, grad_output)
 
 
 class ReLU(Function):

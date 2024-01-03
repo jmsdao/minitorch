@@ -61,11 +61,9 @@ def to_index(ordinal: int, shape: Shape, out_index: OutIndex) -> None:
         out_index : return index corresponding to position.
 
     """
-    for i in range(len(shape) - 1):
+    for i in range(len(shape)):
         prod = int(np.prod(shape[i + 1 :]))
-        out_index[i] = ordinal // prod
-        ordinal -= out_index[i] * prod
-    out_index[-1] = ordinal
+        out_index[i] = (ordinal // prod) % shape[i]
 
 
 def broadcast_index(

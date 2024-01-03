@@ -125,6 +125,10 @@ def test_reduce(
     "Run backward for all reduce functions above."
     t1 = data.draw(tensors(backend=shared[backend]))
     name, _, tensor_fn = fn
+    # if name == "sum_red":
+    #     print(type(tensor_fn), tensor_fn)
+    #     print(t1)
+    #     print(type(t1.backend), t1.backend)
     grad_check(tensor_fn, t1)
 
 

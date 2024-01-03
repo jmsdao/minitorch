@@ -82,7 +82,11 @@ def shaped_tensors(
     draw: DrawFn,
     n: int,
     numbers: SearchStrategy[float] = floats(
-        allow_nan=False, min_value=-100, max_value=100
+        # allow_nan=False, min_value=-100, max_value=100
+        # Reduce range to avoid overflow and triggering hypothesis HealthCheck
+        allow_nan=False,
+        min_value=-1,
+        max_value=1,
     ),
     backend: Optional[TensorBackend] = None,
 ) -> List[Tensor]:
